@@ -10,7 +10,7 @@ const ASPECT_PRESETS = [
 
 const HANDLE_SIZE = 12
 
-export default function VideoCropper({ videoFile, onExport, exporting, progress, ffmpegLoading }) {
+export default function VideoCropper({ videoFile, onExport, exporting, progress }) {
   const videoRef = useRef(null)
   const containerRef = useRef(null)
   const wrapperRef = useRef(null)
@@ -288,23 +288,23 @@ export default function VideoCropper({ videoFile, onExport, exporting, progress,
         </div>
         <button
           onClick={handleExport}
-          disabled={exporting || ffmpegLoading}
+          disabled={exporting}
           className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
-            exporting || ffmpegLoading
+            exporting
               ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
               : 'bg-indigo-600 text-white hover:bg-indigo-500 active:bg-indigo-700'
           }`}
         >
-          {ffmpegLoading ? 'Loading FFmpeg...' : exporting ? `Exporting ${progress}%` : 'Export Video'}
+          {exporting ? `Exporting ${progress}%` : 'Export Video'}
         </button>
       </div>
 
       {/* Progress bar */}
-      {(exporting || ffmpegLoading) && (
+      {exporting && (
         <div className="h-1 bg-gray-800 shrink-0">
           <div
-            className={`h-full bg-indigo-500 transition-all duration-300 ${ffmpegLoading ? 'animate-pulse' : ''}`}
-            style={{ width: ffmpegLoading ? '100%' : `${progress}%` }}
+            className="h-full bg-indigo-500 transition-all duration-300"
+            style={{ width: `${progress}%` }}
           />
         </div>
       )}

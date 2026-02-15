@@ -5,19 +5,16 @@ import { useFFmpeg } from './hooks/useFFmpeg'
 
 function App() {
   const [videoFile, setVideoFile] = useState(null)
-  const { load, loaded, loading, cropVideo, exporting, progress } = useFFmpeg()
+  const { cropVideo, exporting, progress } = useFFmpeg()
 
   const handleExport = useCallback(async (cropParams) => {
     try {
-      if (!loaded) {
-        await load()
-      }
       await cropVideo(videoFile, cropParams)
     } catch (err) {
       console.error('Export failed:', err)
-      alert('Export failed. Make sure your browser supports SharedArrayBuffer (Cross-Origin Isolation required).')
+      alert('Export failed: ' + err.message)
     }
-  }, [loaded, load, cropVideo, videoFile])
+  }, [cropVideo, videoFile])
 
   const handleReset = useCallback(() => {
     setVideoFile(null)
@@ -34,7 +31,6 @@ function App() {
             onExport={handleExport}
             exporting={exporting}
             progress={progress}
-            ffmpegLoading={loading}
           />
           {!exporting && (
             <button
